@@ -1,4 +1,5 @@
 import './pages/index.css';
+import { initialCards } from './scripts/cards';
 
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
@@ -6,11 +7,11 @@ const cardList = document.querySelector('.places__list');
 const createCard = (card, handlerDelete) => {
   const { name, link } = card;
 
-  newCard = cardTemplate.querySelector('.card').cloneNode(true);
+  const newCard = cardTemplate.querySelector('.card').cloneNode(true);
 
-  cardImage = newCard.querySelector('.card__image');
-  cardTitle = newCard.querySelector('.card__title');
-  cardDeleteButton = newCard.querySelector('.card__delete-button');
+  const cardImage = newCard.querySelector('.card__image');
+  const cardTitle = newCard.querySelector('.card__title');
+  const cardDeleteButton = newCard.querySelector('.card__delete-button');
 
   cardImage.src = link;
   cardImage.alt = name;
