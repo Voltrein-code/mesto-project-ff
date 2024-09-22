@@ -1,36 +1,82 @@
 import './pages/index.css';
-import { initialCards } from './scripts/cards';
+import initialCards from './scripts/cards.js';
+import { closePopup, openPopup, setEventListeners } from './scripts/modal.js';
+import { createCard, deleteCard, likeCard } from './scripts/card.js';
+import {
+  cardList,
+  profileaddButton,
+  profileEditButton,
+  popupAdd,
+  popupEdit,
+  popupImage,
+  editProfileName,
+  editProfileDescription,
+  profileName,
+  profileDescription,
+  editProfileForm,
+  addCardName,
+  addCardLink,
+  addCardForm,
+  displayedImage,
+  displayedImageDescription
+} from './scripts/constants.js';
 
-const cardTemplate = document.querySelector('#card-template').content;
-const cardList = document.querySelector('.places__list');
+const showCardImage = ({name, link}) => {
+  displayedImage.src = link;
+  displayedImage.alt = name;
+  displayedImageDescription.textContent = name;
 
-const createCard = (card, handlerDelete) => {
-  const { name, link } = card;
+  openPopup(popupImage);
+};
 
-  const newCard = cardTemplate.querySelector('.card').cloneNode(true);
+const cardHandlers = {
+  handlerDelete: deleteCard,
+  handlerLike: likeCard,
+  handlerImageClick: showCardImage
+};
 
-  const cardImage = newCard.querySelector('.card__image');
-  const cardTitle = newCard.querySelector('.card__title');
-  const cardDeleteButton = newCard.querySelector('.card__delete-button');
+const submitProfileHandler = (evt) => {
+  evt.preventDefault();
 
-  cardImage.src = link;
-  cardImage.alt = name;
-  cardTitle.textContent = name;
+  profileName.textContent = editProfileName.value;
+  profileDescription.textContent = editProfileDescription.value;
 
-  cardDeleteButton.addEventListener('click', handlerDelete);
+  closePopup(popupEdit);
+};
 
-  return newCard;
+const submitCardHandler = (evt) => {
+  evt.preventDefault();
+
+  const cardData = {
+    name: addCardName.value,
+    link: addCardLink.value,
+  };
+
+  cardList.prepend(createCard(cardData, cardHandlers));
+
+  closePopup(popupAdd);
+  addCardForm.reset();
 }
 
-const deleteCard = (evt) => {
-  evt.target.closest('.card').remove();
-}
+initialCards.forEach((card) => {
+  cardList.append(createCard(card, cardHandlers));
+});
 
-const renderCards = () => {
-  initialCards.forEach((card) => {
-    cardList.append(createCard(card, deleteCard));
-  });
-  
-}
+// events
+profileaddButton.addEventListener('click', () => {
+  openPopup(popupAdd);
+});
 
-renderCards();
+profileEditButton.addEventListener('click', () => {
+  editProfileName.value = profileName.textContent;
+  editProfileDescription.value = profileDescription.textContent;
+
+  openPopup(popupEdit);
+});
+
+editProfileForm.addEventListener('submit', submitProfileHandler);
+addCardForm.addEventListener('submit', submitCardHandler);
+
+setEventListeners(popupAdd);
+setEventListeners(popupEdit);
+setEventListeners(popupImage);

@@ -25,4 +25,4 @@ const initialCards = [
     }
 ];
 
-module.exports = { initialCards };
+export default initialCards;
