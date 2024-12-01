@@ -90,7 +90,9 @@ profileEditButton.addEventListener('click', () => {
 editProfileForm.addEventListener('submit', submitProfileHandler);
 addCardForm.addEventListener('submit', submitCardHandler);
 addCardForm.addEventListener('reset', () => {
-  formValidator.clearValidation(addCardForm);
+  const submitButton = addCardForm.querySelector(".popup__button");
+  
+  formValidator.disableButton(submitButton);
 })
 
 setEventListeners(popupAdd);

@@ -37,7 +37,7 @@
     return inputs.some(input => !input.validity.valid);
   }
 
-  #disableButton(button) {
+  disableButton(button) {
     button.disabled = true;
     button.classList.add(this.#selectors.inactiveButtonClass);
   }
@@ -49,7 +49,7 @@
 
   #toggleButtonAvailability(inputs, button) {
     if (this.#hasInvalidInput(inputs)) {
-      this.#disableButton(button);
+      this.disableButton(button);
     } else {
       this.#enableButton(button);
     }
@@ -58,6 +58,8 @@
   #setEventListeners(form) {
     const inputs = Array.from(form.querySelectorAll(this.#selectors.inputSelector));
     const buttonSubmit = form.querySelector(this.#selectors.submitButtonSelector);
+
+    this.#toggleButtonAvailability(inputs, buttonSubmit);
 
     inputs.forEach((input) => {
       input.addEventListener("input", () => {
@@ -77,7 +79,7 @@
       this.#hideInputError(errorElement, input);
     });
 
-    this.#disableButton(buttonSubmit);
+    this.disableButton(buttonSubmit);
   }
 
   enableValidation(forms) {
