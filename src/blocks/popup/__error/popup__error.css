@@ -1,8 +1,9 @@
-.popup__input-error {
+.popup__error {
   display: inline-block;
   color: #FF0000;
   width: 100%;
   font-size: 12px;
   line-height: 1em;
   min-height: 20px;
+  visibility: hidden;
 }

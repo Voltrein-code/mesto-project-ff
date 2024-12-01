@@ -21,6 +21,17 @@ import {
   displayedImageDescription
 } from './scripts/constants.js';
 
+import FormValidator from './scripts/validation.js';
+
+const formValidator = new FormValidator({
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+});
+
 const showCardImage = ({name, link}) => {
   displayedImage.src = link;
   displayedImage.alt = name;
@@ -72,11 +83,19 @@ profileEditButton.addEventListener('click', () => {
   editProfileDescription.value = profileDescription.textContent;
 
   openPopup(popupEdit);
+  
+  formValidator.clearValidation(editProfileForm);
 });
 
 editProfileForm.addEventListener('submit', submitProfileHandler);
 addCardForm.addEventListener('submit', submitCardHandler);
+addCardForm.addEventListener('reset', () => {
+  formValidator.clearValidation(addCardForm);
+})
 
 setEventListeners(popupAdd);
 setEventListeners(popupEdit);
 setEventListeners(popupImage);
+
+// validation
+formValidator.enableValidation(document.forms);
