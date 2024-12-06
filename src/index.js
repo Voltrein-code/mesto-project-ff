@@ -18,10 +18,15 @@ import {
   addCardLink,
   addCardForm,
   displayedImage,
-  displayedImageDescription
+  displayedImageDescription,
+  token,
+  baseURL,
+  profileAvatar
 } from './scripts/constants.js';
 
 import FormValidator from './scripts/validation.js';
+import Api from './scripts/api.js';
+import User from './scripts/user.js';
 
 const formValidator = new FormValidator({
   formSelector: ".popup__form",
@@ -31,6 +36,19 @@ const formValidator = new FormValidator({
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 });
+
+const api = new Api({
+  headers: {
+    authorization: token
+  },
+  baseURL: baseURL
+});
+
+const currentUser = new User(
+  profileName,
+  profileDescription,
+  profileAvatar
+);
 
 const showCardImage = ({name, link}) => {
   displayedImage.src = link;
@@ -48,9 +66,22 @@ const cardHandlers = {
 
 const submitProfileHandler = (evt) => {
   evt.preventDefault();
+  let newUserData;
 
-  profileName.textContent = editProfileName.value;
-  profileDescription.textContent = editProfileDescription.value;
+  profileName.textContent = "Загрузка...";
+  profileDescription.textContent = "Загрузка...";
+
+  api.updateUser({
+    name: editProfileName.value,
+    about: editProfileDescription.value
+  })
+    .then((res) => {
+      newUserData = {...res};
+    })
+    .finally(() => {
+      profileName.textContent = newUserData.name;
+      profileDescription.textContent = newUserData.about;
+    });
 
   closePopup(popupEdit);
 };
@@ -58,20 +89,27 @@ const submitProfileHandler = (evt) => {
 const submitCardHandler = (evt) => {
   evt.preventDefault();
 
-  const cardData = {
+  api.addCard({
     name: addCardName.value,
     link: addCardLink.value,
-  };
-
-  cardList.prepend(createCard(cardData, cardHandlers));
+  })
+    .then((res) => {
+      cardList.prepend(createCard(res, cardHandlers));
+    })
 
   closePopup(popupAdd);
   addCardForm.reset();
 }
 
-initialCards.forEach((card) => {
-  cardList.append(createCard(card, cardHandlers));
-});
+Promise.all([api.getUserInfo(), api.getCards()])
+  .then(([userData, cards]) => {
+    currentUser.userInfo = userData;
+    currentUser.renderUserInfo();
+
+    cards.forEach((card) => {
+      cardList.append(createCard(card, cardHandlers));
+    })
+  });
 
 // events
 profileaddButton.addEventListener('click', () => {
