@@ -94,7 +94,7 @@ const submitCardHandler = (evt) => {
     link: addCardLink.value,
   })
     .then((res) => {
-      cardList.prepend(createCard(res, cardHandlers));
+      cardList.prepend(createCard(res, cardHandlers, api));
     })
 
   closePopup(popupAdd);
@@ -107,7 +107,7 @@ Promise.all([api.getUserInfo(), api.getCards()])
     currentUser.renderUserInfo();
 
     cards.forEach((card) => {
-      cardList.append(createCard(card, cardHandlers));
+      cardList.append(createCard(card, cardHandlers, api, currentUser.id));
     })
   });
 

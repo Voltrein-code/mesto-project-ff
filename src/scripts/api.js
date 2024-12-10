@@ -46,4 +46,12 @@ export default class Api {
     })
       .then(this.#getServerResponse);
   }
+
+  setLikeStatus(cardID, isLiked) {
+    return fetch(`${this.#baseURL}/cards/likes/${cardID}`, {
+      headers: this.#headers,
+      method: isLiked ? 'DELETE' : 'PUT'
+    })
+      .then(this.#getServerResponse);
+  }
 }
