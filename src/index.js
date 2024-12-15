@@ -1,5 +1,4 @@
 import './pages/index.css';
-import initialCards from './scripts/cards.js';
 import { closePopup, openPopup, setEventListeners } from './scripts/modal.js';
 import { createCard, deleteCard, likeCard } from './scripts/card.js';
 import {
@@ -21,7 +20,8 @@ import {
   displayedImageDescription,
   token,
   baseURL,
-  profileAvatar
+  profileAvatar,
+  popupSubmit
 } from './scripts/constants.js';
 
 import FormValidator from './scripts/validation.js';
@@ -136,6 +136,7 @@ addCardForm.addEventListener('reset', () => {
 setEventListeners(popupAdd);
 setEventListeners(popupEdit);
 setEventListeners(popupImage);
+setEventListeners(popupSubmit);
 
 // validation
 formValidator.enableValidation(document.forms);
