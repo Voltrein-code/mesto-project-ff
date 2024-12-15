@@ -78,12 +78,12 @@ const submitProfileHandler = (evt) => {
     .then((res) => {
       newUserData = {...res};
     })
+    .catch((err) => {
+      console.log(err);
+    })
     .finally(() => {
       profileName.textContent = newUserData.name;
       profileDescription.textContent = newUserData.about;
-    })
-    .catch((err) => {
-      console.log(err);
     })
 
   closePopup(popupEdit);

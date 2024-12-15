@@ -71,11 +71,11 @@ const deleteCard = (id, cardElement, api) => {
     .then((card) => {
       cardElement.remove();
     })
-    .finally(() => {
-      closePopup(popupSubmit);
-    })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      closePopup(popupSubmit);
     })
 }
 
