@@ -15,6 +15,7 @@ export const profileEditButton = document.querySelector('.profile__edit-button')
 export const popupAdd = document.querySelector('.popup_type_new-card');
 export const popupEdit = document.querySelector('.popup_type_edit');
 export const popupImage = document.querySelector('.popup_type_image');
+export const popupSubmit = document.querySelector('.popup_type_delete');
 
 export const displayedImage = popupImage.querySelector('.popup__image');
 export const displayedImageDescription = popupImage.querySelector('.popup__caption');
@@ -22,6 +23,7 @@ export const displayedImageDescription = popupImage.querySelector('.popup__capti
 // forms
 export const addCardForm = document.forms['new-place'];
 export const editProfileForm = document.forms['edit-profile'];
+export const deleteForm = document.forms['delete-card'];
 
 // form-elements
 export const addCardName = addCardForm.elements['place-name'];

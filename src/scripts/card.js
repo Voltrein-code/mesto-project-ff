@@ -1,3 +1,6 @@
+import { deleteForm, popupSubmit } from "./constants";
+import { closePopup, openPopup } from "./modal";
+
 function getCardTemplate() {
   return document
     .querySelector('#card-template').content
@@ -36,7 +39,19 @@ const createCard = (card, handlers, api, userID) => {
     }
   })();
 
-  cardDeleteButton.addEventListener('click', handlerDelete);
+  cardDeleteButton.addEventListener('click', (evt) => {
+    openPopup(popupSubmit);
+
+    const cardForDelete = evt.target.closest('.card');
+    
+    deleteForm.addEventListener('submit', function deleteCardCallback(evt) {
+      evt.preventDefault();
+
+      handlerDelete(_id, cardForDelete, api);
+      deleteForm.removeEventListener('submit', deleteCardCallback);
+    });
+  });
+  
   cardLikeButton.addEventListener('click', (evt) => {
     handlerLike({
       id: _id,
@@ -51,8 +66,14 @@ const createCard = (card, handlers, api, userID) => {
   return newCard;
 }
 
-const deleteCard = (evt) => {
-  evt.target.closest('.card').remove();
+const deleteCard = (id, cardElement, api) => {
+  api.deleteCard(id)
+    .then((card) => {
+      cardElement.remove();
+    })
+    .finally(() => {
+      closePopup(popupSubmit);
+    })
 }
 
 const likeCard = (cardInstance, api) => {
