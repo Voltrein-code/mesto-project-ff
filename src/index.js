@@ -81,7 +81,10 @@ const submitProfileHandler = (evt) => {
     .finally(() => {
       profileName.textContent = newUserData.name;
       profileDescription.textContent = newUserData.about;
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 
   closePopup(popupEdit);
 };
@@ -96,6 +99,9 @@ const submitCardHandler = (evt) => {
     .then((res) => {
       cardList.prepend(createCard(res, cardHandlers, api));
     })
+    .catch((err) => {
+      console.log(err);
+    })
 
   closePopup(popupAdd);
   addCardForm.reset();
@@ -108,6 +114,9 @@ Promise.all([api.getUserInfo(), api.getCards()])
 
     cards.forEach((card) => {
       cardList.append(createCard(card, cardHandlers, api, currentUser.id));
+    })
+    .catch((err) => {
+      console.log(err);
     })
   });
 

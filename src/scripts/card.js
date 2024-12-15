@@ -74,6 +74,9 @@ const deleteCard = (id, cardElement, api) => {
     .finally(() => {
       closePopup(popupSubmit);
     })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
 const likeCard = (cardInstance, api) => {
@@ -84,7 +87,10 @@ const likeCard = (cardInstance, api) => {
     .then((cardData) => {
       likeButton.classList.toggle('card__like-button_is-active');
       likeCount.textContent = cardData.likes.length;
-    })  
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
 export { createCard, deleteCard, likeCard };
