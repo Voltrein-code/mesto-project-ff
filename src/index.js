@@ -115,10 +115,10 @@ Promise.all([api.getUserInfo(), api.getCards()])
     cards.forEach((card) => {
       cardList.append(createCard(card, cardHandlers, api, currentUser.id));
     })
-    .catch((err) => {
-      console.log(err);
-    })
-  });
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 
 // events
 profileaddButton.addEventListener('click', () => {
