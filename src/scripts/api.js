@@ -62,4 +62,13 @@ export default class Api {
     })
       .then(this.#getServerResponse);
   }
+
+  updateAvatar(avatarURL) {
+    return fetch(`${this.#baseURL}/users/me/avatar`, {
+      headers: { ...this.#headers, 'Content-Type': 'application/json'},
+      method: 'PATCH',
+      body: JSON.stringify({ avatar: avatarURL })
+    })
+      .then(this.#getServerResponse);
+  }
 }

@@ -8,12 +8,13 @@ function getCardTemplate() {
     .cloneNode(true);
 }
 
-const createCard = (card, handlers, api, userID) => {
+const createCard = (card, features, api, userID) => {
   const { name, link, likes, _id, owner } = card;
   const {
     handlerDelete,
     handlerLike,
-    handlerImageClick } = handlers;
+    handlerImageClick,
+    loadingTool } = features;
 
   const newCard = getCardTemplate();
 
@@ -47,7 +48,7 @@ const createCard = (card, handlers, api, userID) => {
     deleteForm.addEventListener('submit', function deleteCardCallback(evt) {
       evt.preventDefault();
 
-      handlerDelete(_id, cardForDelete, api);
+      handlerDelete(_id, cardForDelete, api, loadingTool);
       deleteForm.removeEventListener('submit', deleteCardCallback);
     });
   });
@@ -66,7 +67,10 @@ const createCard = (card, handlers, api, userID) => {
   return newCard;
 }
 
-const deleteCard = (id, cardElement, api) => {
+const deleteCard = (id, cardElement, api, loadingTool) => {
+  loadingTool.popup = popupSubmit;
+  loadingTool.toggleLoading(true);
+
   api.deleteCard(id)
     .then((card) => {
       cardElement.remove();
@@ -75,6 +79,7 @@ const deleteCard = (id, cardElement, api) => {
       console.log(err);
     })
     .finally(() => {
+      loadingTool.toggleLoading(false);
       closePopup(popupSubmit);
     })
 }
