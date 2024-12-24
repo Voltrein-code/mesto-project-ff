@@ -30,6 +30,7 @@
     input.classList.remove(this.#selectors.inputErrorClass);
 
     errorElement.textContent = "";
+    input.setCustomValidity("");
     errorElement.classList.remove(this.#selectors.errorClass);
   }
 
