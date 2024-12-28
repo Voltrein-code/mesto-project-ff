@@ -1,6 +1,3 @@
-// import { deleteForm, popupSubmit } from "./constants";
-// import { closePopup, openPopup } from "./modal";
-
 function getCardTemplate() {
   return document
     .querySelector('#card-template').content
@@ -8,13 +5,12 @@ function getCardTemplate() {
     .cloneNode(true);
 }
 
-const createCard = (card, features, api, userID) => {
+export const createCard = (card, features, api, userID) => {
   const { name, link, likes, _id, owner } = card;
   const {
     handlerDelete,
     handlerLike,
-    handlerImageClick,
-    loadingTool } = features;
+    handlerImageClick } = features;
 
   const newCard = getCardTemplate();
 
@@ -40,53 +36,24 @@ const createCard = (card, features, api, userID) => {
     }
   })();
 
-  cardDeleteButton.addEventListener('click', () => {
-    handlerDelete(_id, car);
+  cardDeleteButton.addEventListener('click', (evt) => {
+    handlerDelete(_id, evt.target.closest('.card'));
   });
-  
-  cardLikeButton.addEventListener('click', (evt) => {
-    handlerLike({
-      id: _id,
-      likeButton: evt.target,
-      likeCount: cardLikes
-    }, api);
+
+  cardLikeButton.addEventListener('click', () => {
+    handlerLike(
+      _id,
+      cardLikeButton.classList.contains('card__like-button_is-active'),
+      (newLikesCount) => {
+        cardLikeButton.classList.toggle('card__like-button_is-active');
+        cardLikes.textContent = newLikesCount;
+      }
+    );
   });
+
   cardImage.addEventListener('click', () => {
     handlerImageClick(card);
   });
 
   return newCard;
 }
-
-// const deleteCard = (id, cardElement, api, loadingTool) => {
-//   loadingTool.popup = popupSubmit;
-//   loadingTool.toggleLoading(true);
-
-//   api.deleteCard(id)
-//     .then((card) => {
-//       cardElement.remove();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       loadingTool.toggleLoading(false);
-//       closePopup(popupSubmit);
-//     })
-// }
-
-const likeCard = (cardInstance, api) => {
-  const { id, likeButton, likeCount } = cardInstance;
-  const isLiked = likeButton.classList.contains('card__like-button_is-active');
-
-  api.setLikeStatus(id, isLiked)
-    .then((cardData) => {
-      likeButton.classList.toggle('card__like-button_is-active');
-      likeCount.textContent = cardData.likes.length;
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-}
-
-export { createCard, likeCard };

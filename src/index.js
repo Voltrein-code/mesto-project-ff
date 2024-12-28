@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { closePopup, openPopup, setEventListeners } from './scripts/modal.js';
-import { createCard, deleteCard, likeCard } from './scripts/card.js';
+import { createCard, likeCard } from './scripts/card.js';
 import {
   cardList,
   profileaddButton,
@@ -71,17 +71,15 @@ const cardDeleteHandler = (cardID, cardElement) => {
 
   const currentCard = { cardID, cardElement };
 
-  deleteForm.onSubmit = function (evt) {
+  deleteForm.onsubmit = function (evt) {
     evt.preventDefault();
-
-    console.log("test");
 
     loadingTool.popup = popupSubmit;
     loadingTool.toggleLoading(true);
 
     api.deleteCard(currentCard.cardID)
-      .then((card) => {
-        currentCard.remove();
+      .then(() => {
+        currentCard.cardElement.remove();
         closePopup(popupSubmit);
       })
       .catch((err) => {
@@ -94,16 +92,24 @@ const cardDeleteHandler = (cardID, cardElement) => {
   }
 }
 
+const cardLikeHandler = (id, isLiked, cardLikeToggler) => {
+  api.setLikeStatus(id, isLiked)
+    .then((cardData) => {
+      cardLikeToggler(cardData.likes.length);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
+
 const cardFeatures = {
   handlerDelete: cardDeleteHandler,
-  handlerLike: likeCard,
-  handlerImageClick: showCardImage,
-  loadingTool: loadingTool
+  handlerLike: cardLikeHandler,
+  handlerImageClick: showCardImage
 };
 
 const submitProfileHandler = (evt) => {
   evt.preventDefault();
-  let newUserData;
 
   loadingTool.popup = popupEdit;
   loadingTool.toggleLoading(true);
@@ -114,13 +120,13 @@ const submitProfileHandler = (evt) => {
   })
     .then((res) => {
       currentUser.userInfo = res;
+      closePopup(popupEdit);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
       currentUser.renderUserInfo();
-      closePopup(popupEdit);
       loadingTool.toggleLoading(false);
     })
 };
@@ -137,13 +143,13 @@ const submitCardHandler = (evt) => {
   })
     .then((res) => {
       cardList.prepend(createCard(res, cardFeatures, api));
+      closePopup(popupAdd);
+      addCardForm.reset();
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      closePopup(popupAdd);
-      addCardForm.reset();
       loadingTool.toggleLoading(false);
     })
 }
@@ -157,13 +163,14 @@ const submitAvatarHandler = (evt) => {
   api.updateAvatar(editAvatarLink.value)
     .then((data) => {
       currentUser.setAvatar(data.avatar);
+      closePopup(popupAvatar);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
       currentUser.renderUserInfo();
-      closePopup(popupAvatar);
+
       loadingTool.toggleLoading(false);
     })
 }
