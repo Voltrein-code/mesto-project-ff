@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { closePopup, openPopup, setEventListeners } from './scripts/modal.js';
-import { createCard, likeCard } from './scripts/card.js';
+import { createCard } from './scripts/card.js';
 import {
   cardList,
   profileaddButton,
