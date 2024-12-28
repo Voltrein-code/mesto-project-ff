@@ -1,5 +1,5 @@
-import { deleteForm, popupSubmit } from "./constants";
-import { closePopup, openPopup } from "./modal";
+// import { deleteForm, popupSubmit } from "./constants";
+// import { closePopup, openPopup } from "./modal";
 
 function getCardTemplate() {
   return document
@@ -40,17 +40,8 @@ const createCard = (card, features, api, userID) => {
     }
   })();
 
-  cardDeleteButton.addEventListener('click', (evt) => {
-    openPopup(popupSubmit);
-
-    const cardForDelete = evt.target.closest('.card');
-    
-    deleteForm.addEventListener('submit', function deleteCardCallback(evt) {
-      evt.preventDefault();
-
-      handlerDelete(_id, cardForDelete, api, loadingTool);
-      deleteForm.removeEventListener('submit', deleteCardCallback);
-    });
+  cardDeleteButton.addEventListener('click', () => {
+    handlerDelete(_id, car);
   });
   
   cardLikeButton.addEventListener('click', (evt) => {
@@ -67,22 +58,22 @@ const createCard = (card, features, api, userID) => {
   return newCard;
 }
 
-const deleteCard = (id, cardElement, api, loadingTool) => {
-  loadingTool.popup = popupSubmit;
-  loadingTool.toggleLoading(true);
+// const deleteCard = (id, cardElement, api, loadingTool) => {
+//   loadingTool.popup = popupSubmit;
+//   loadingTool.toggleLoading(true);
 
-  api.deleteCard(id)
-    .then((card) => {
-      cardElement.remove();
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      loadingTool.toggleLoading(false);
-      closePopup(popupSubmit);
-    })
-}
+//   api.deleteCard(id)
+//     .then((card) => {
+//       cardElement.remove();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+//     .finally(() => {
+//       loadingTool.toggleLoading(false);
+//       closePopup(popupSubmit);
+//     })
+// }
 
 const likeCard = (cardInstance, api) => {
   const { id, likeButton, likeCount } = cardInstance;
@@ -98,4 +89,4 @@ const likeCard = (cardInstance, api) => {
     })
 }
 
-export { createCard, deleteCard, likeCard };
+export { createCard, likeCard };

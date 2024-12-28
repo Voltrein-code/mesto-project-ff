@@ -25,7 +25,8 @@ import {
   profileAvatarEdit,
   popupAvatar,
   editAvatarLink,
-  editAvatarForm
+  editAvatarForm,
+  deleteForm
 } from './scripts/constants.js';
 
 import FormValidator from './scripts/validation.js';
@@ -65,8 +66,36 @@ const showCardImage = ({name, link}) => {
   openPopup(popupImage);
 };
 
+const cardDeleteHandler = (cardID, cardElement) => {
+  openPopup(popupSubmit);
+
+  const currentCard = { cardID, cardElement };
+
+  deleteForm.onSubmit = function (evt) {
+    evt.preventDefault();
+
+    console.log("test");
+
+    loadingTool.popup = popupSubmit;
+    loadingTool.toggleLoading(true);
+
+    api.deleteCard(currentCard.cardID)
+      .then((card) => {
+        currentCard.remove();
+        closePopup(popupSubmit);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        loadingTool.toggleLoading(false);
+      })
+    return false;
+  }
+}
+
 const cardFeatures = {
-  handlerDelete: deleteCard,
+  handlerDelete: cardDeleteHandler,
   handlerLike: likeCard,
   handlerImageClick: showCardImage,
   loadingTool: loadingTool
